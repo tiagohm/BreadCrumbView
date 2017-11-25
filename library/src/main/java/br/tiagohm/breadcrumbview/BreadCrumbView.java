@@ -208,12 +208,13 @@ public class BreadCrumbView<T> extends FrameLayout {
                     icon.setVisibility(GONE);
                 }
                 //Seta o texto.
-                if (item.getSelectedItem() != null) {
+                final String texto = item.getText();
+                if (texto != null) {
                     LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) icon.getLayoutParams();
                     float d = icon.getContext().getResources().getDisplayMetrics().density;
                     lp.setMarginEnd((int) (5 * d));
                     icon.setLayoutParams(lp);
-                    text.setText(item.getSelectedItem().toString());
+                    text.setText(texto);
                     text.setTextColor(breadCrumbView.getTextColor());
                 } else {
                     text.setText(null);

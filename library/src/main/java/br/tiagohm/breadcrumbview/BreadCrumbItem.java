@@ -70,4 +70,8 @@ public class BreadCrumbItem<T> {
     public List<T> getItens() {
         return itens;
     }
+
+    public String getText() {
+        return getSelectedItem() != null ? getSelectedItem().toString() : null;
+    }
 }

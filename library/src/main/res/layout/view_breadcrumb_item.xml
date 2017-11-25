@@ -8,9 +8,7 @@
     <ImageView
         android:id="@+id/breadcrumb_item_icon"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"/>
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/breadcrumb_item_text"

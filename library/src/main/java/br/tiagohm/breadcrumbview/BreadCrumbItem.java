@@ -19,6 +19,13 @@ public class BreadCrumbItem<T> {
         this.itens = new LinkedList<>();
     }
 
+    public BreadCrumbItem(int icon, T item) {
+        this.icon = icon;
+        this.itens = new LinkedList<>();
+        this.itens.add(item);
+        selectedIndex = 0;
+    }
+
     public BreadCrumbItem(List<T> itens) {
         this(itens.size() > 0 ? 0 : -1, itens);
     }

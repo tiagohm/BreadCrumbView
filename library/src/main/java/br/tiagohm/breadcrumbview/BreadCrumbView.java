@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.LinkedList;
@@ -199,12 +200,19 @@ public class BreadCrumbView<T> extends FrameLayout {
             public void setItem(BreadCrumbItem<?> item) {
                 //Seta o ícone.
                 if (item.getIcon() != 0) {
+                    icon.setVisibility(VISIBLE);
                     icon.setImageResource(item.getIcon());
                     icon.setColorFilter(breadCrumbView.getTextColor(), PorterDuff.Mode.SRC_ATOP);
                     icon.setImageAlpha(Color.alpha(breadCrumbView.getTextColor()));
+                } else {
+                    icon.setVisibility(GONE);
                 }
                 //Seta o texto.
                 if (item.getSelectedItem() != null) {
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) icon.getLayoutParams();
+                    float d = icon.getContext().getResources().getDisplayMetrics().density;
+                    lp.setMarginEnd((int) (5 * d));
+                    icon.setLayoutParams(lp);
                     text.setText(item.getSelectedItem().toString());
                     text.setTextColor(breadCrumbView.getTextColor());
                 } else {

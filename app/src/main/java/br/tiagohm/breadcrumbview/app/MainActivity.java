@@ -21,9 +21,9 @@ public class MainActivity extends AppCompatActivity {
         bcv.setSeparatorColor(0xCCFFFFFF);
         bcv.setTextColor(0xCCFFFFFF);
         bcv.addItem(new BreadCrumbItem(R.drawable.home));
-        bcv.addItem(new BreadCrumbItem<>("tiagohm"));
-        bcv.addItem(new BreadCrumbItem<>("GitHub"));
-        bcv.addItem(new BreadCrumbItem<>("Android"));
-        bcv.addItem(new BreadCrumbItem<>("BreadCrumbView"));
+        bcv.addItem(new BreadCrumbItem(R.drawable.folder, "tiagohm"));
+        bcv.addItem(new BreadCrumbItem(R.drawable.folder, "GitHub"));
+        bcv.addItem(new BreadCrumbItem(R.drawable.folder, "Android"));
+        bcv.addItem(new BreadCrumbItem(R.drawable.folder, "BreadCrumbView"));
     }
 }

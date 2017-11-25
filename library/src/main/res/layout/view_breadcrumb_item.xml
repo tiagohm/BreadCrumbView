@@ -8,12 +8,16 @@
     <ImageView
         android:id="@+id/breadcrumb_item_icon"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"/>
 
     <TextView
         android:id="@+id/breadcrumb_item_text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
         android:gravity="center"
         android:orientation="vertical"
         android:text="Item"

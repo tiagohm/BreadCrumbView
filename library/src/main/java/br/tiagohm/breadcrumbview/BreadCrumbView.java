@@ -24,11 +24,17 @@ import java.util.List;
 
 public class BreadCrumbView<T> extends FrameLayout {
 
+    public interface BreadCrumbListener<T> {
+
+        void onItemClicked(BreadCrumbView<T> view, BreadCrumbItem<T> item, int level);
+    }
+
     private RecyclerView mBreadCrumb;
     private BreadCrumbAdapter mAdapter;
     private List<BreadCrumbItem<T>> itens = new LinkedList<>();
     private int textColor = Color.WHITE;
     private int separatorColor = Color.WHITE;
+    private BreadCrumbListener<T> listener;
 
     public BreadCrumbView(@NonNull Context context) {
         this(context, null);
@@ -69,6 +75,10 @@ public class BreadCrumbView<T> extends FrameLayout {
             itens.add(new BreadCrumbItem("Item 6", "Item 7", "Item 8", "Item 9"));
             update();
         }
+    }
+
+    public void setBreadCrumbListener(BreadCrumbListener<T> listener) {
+        this.listener = listener;
     }
 
     public int getTextColor() {
@@ -122,11 +132,11 @@ public class BreadCrumbView<T> extends FrameLayout {
         mAdapter.notifyDataSetChanged();
     }
 
-    private static class BreadCrumbAdapter extends RecyclerView.Adapter<BreadCrumbAdapter.ItemHolder> {
+    private static class BreadCrumbAdapter<T> extends RecyclerView.Adapter<BreadCrumbAdapter.ItemHolder> {
 
-        private BreadCrumbView<?> breadCrumbView;
+        private BreadCrumbView<T> breadCrumbView;
 
-        public BreadCrumbAdapter(BreadCrumbView<?> breadCrumbView) {
+        public BreadCrumbAdapter(BreadCrumbView<T> breadCrumbView) {
             this.breadCrumbView = breadCrumbView;
         }
 
@@ -141,8 +151,8 @@ public class BreadCrumbView<T> extends FrameLayout {
         }
 
         @Override
-        public void onBindViewHolder(ItemHolder holder, int position) {
-            if (holder instanceof SeparatorIconHolder) {
+        public void onBindViewHolder(BreadCrumbAdapter.ItemHolder holder, int position) {
+            if (holder instanceof BreadCrumbAdapter.SeparatorIconHolder) {
                 holder.setItem(breadCrumbView.itens.get((position - 1) / 2 + 1));
             } else {
                 holder.setItem(breadCrumbView.itens.get(position / 2));
@@ -194,10 +204,20 @@ public class BreadCrumbView<T> extends FrameLayout {
                 super(itemView);
                 icon = itemView.findViewById(R.id.breadcrumb_item_icon);
                 text = itemView.findViewById(R.id.breadcrumb_item_text);
+                itemView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (breadCrumbView.listener != null) {
+                            BreadCrumbItem item = (BreadCrumbItem) view.getTag();
+                            breadCrumbView.listener.onItemClicked(breadCrumbView, item, breadCrumbView.itens.indexOf(item));
+                        }
+                    }
+                });
             }
 
             @Override
             public void setItem(BreadCrumbItem<?> item) {
+                itemView.setTag(item);
                 //Seta o ícone.
                 if (item.getIcon() != 0) {
                     icon.setVisibility(VISIBLE);

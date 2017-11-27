@@ -2,6 +2,7 @@ package br.tiagohm.breadcrumbview.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import br.tiagohm.breadcrumbview.BreadCrumbItem;
 import br.tiagohm.breadcrumbview.BreadCrumbView;
@@ -25,5 +26,11 @@ public class MainActivity extends AppCompatActivity {
         bcv.addItem(new BreadCrumbItem(R.drawable.folder, "GitHub"));
         bcv.addItem(new BreadCrumbItem(R.drawable.folder, "Android"));
         bcv.addItem(new BreadCrumbItem(R.drawable.folder, "BreadCrumbView"));
+        bcv.setBreadCrumbListener(new BreadCrumbView.BreadCrumbListener() {
+            @Override
+            public void onItemClicked(BreadCrumbView view, BreadCrumbItem item, int level) {
+                Toast.makeText(MainActivity.this, "pos: " + level + " " + item.getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

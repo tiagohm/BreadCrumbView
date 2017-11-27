@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(BreadCrumbView view, BreadCrumbItem item, int level) {
                 Toast.makeText(MainActivity.this, "pos: " + level + " " + item.getText(), Toast.LENGTH_SHORT).show();
+                view.removeItemsAfter(level);
             }
         });
     }

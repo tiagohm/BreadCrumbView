@@ -106,9 +106,22 @@ public class BreadCrumbView<T> extends FrameLayout {
     public void addItem(@NonNull BreadCrumbItem<T> item) {
         int oldSize = itens.size();
         itens.add(item);
-        mAdapter.notifyItemRangeInserted(oldSize, 2);
-        mAdapter.notifyItemChanged(oldSize - 1);
+        mAdapter.notifyDataSetChanged();
         smoothScrollToEndPosition();
+    }
+
+    public void removeItemsAfter(int level) {
+        if (level < itens.size()) {
+            while (itens.size() > level) {
+                itens.remove(itens.size() - 1);
+            }
+            mAdapter.notifyDataSetChanged();
+            smoothScrollToEndPosition();
+        }
+    }
+
+    public void removeLastItem() {
+        removeItemsAfter(itens.size() - 1);
     }
 
     private void smoothScrollToEndPosition() {

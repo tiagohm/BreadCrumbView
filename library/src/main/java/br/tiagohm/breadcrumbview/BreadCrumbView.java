@@ -267,9 +267,20 @@ public class BreadCrumbView<T> extends FrameLayout {
                 popupWindow.setAdapter(null);
                 //Preenche o popup.
                 if (item.getItens().size() > 1) {
-                    ListAdapter adapter = new ArrayAdapter(getContext(), R.layout.view_breadcrumb_dropdown_item, android.R.id.text1, (List<T>) item.getItens());
+                    ListAdapter adapter = new ArrayAdapter(getContext(), R.layout.view_breadcrumb_dropdown_item, android.R.id.text1, item.getItens());
                     popupWindow.setAdapter(adapter);
-                    //popupWindow.setWidth(ViewUtils.measureContentWidth(getPopupThemedContext(), adapter));
+                    //Calcula a largura ideal do popup baseado no comprimento do texto dos itens.
+                    final int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                    final int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+                    View itemView = null;
+                    int maxWidth = 0;
+                    for (int i = 0; i < adapter.getCount(); i++) {
+                        itemView = adapter.getView(i, itemView, null);
+                        itemView.measure(widthMeasureSpec, heightMeasureSpec);
+                        maxWidth = Math.max(maxWidth, itemView.getMeasuredWidth());
+                    }
+                    //Seta a largura ideal do popup.
+                    popupWindow.setWidth(maxWidth);
                 }
             }
 

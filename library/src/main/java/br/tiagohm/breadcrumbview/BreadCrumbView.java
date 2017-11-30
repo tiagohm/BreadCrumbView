@@ -9,14 +9,18 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import java.util.LinkedList;
@@ -27,6 +31,8 @@ public class BreadCrumbView<T> extends FrameLayout {
     public interface BreadCrumbListener<T> {
 
         void onItemClicked(BreadCrumbView<T> view, BreadCrumbItem<T> item, int level);
+
+        void onItemValueChanged(BreadCrumbView<T> view, BreadCrumbItem<T> item, int level, T oldSelectedItem, T selectedItem);
     }
 
     private RecyclerView mBreadCrumb;
@@ -68,13 +74,6 @@ public class BreadCrumbView<T> extends FrameLayout {
         mBreadCrumb.setLayoutManager(llm);
         mBreadCrumb.setOverScrollMode(OVER_SCROLL_NEVER);
         mBreadCrumb.setAdapter(mAdapter = new BreadCrumbAdapter(this));
-        //Testando...
-        if (isInEditMode()) {
-            itens.add(new BreadCrumbItem("Item 1", "Item 2", "Item 3"));
-            itens.add(new BreadCrumbItem("Item 4", "Item 5"));
-            itens.add(new BreadCrumbItem("Item 6", "Item 7", "Item 8", "Item 9"));
-            update();
-        }
     }
 
     public void setBreadCrumbListener(BreadCrumbListener<T> listener) {
@@ -190,6 +189,10 @@ public class BreadCrumbView<T> extends FrameLayout {
 
             public void setItem(BreadCrumbItem<?> item) {
             }
+
+            public Context getContext() {
+                return breadCrumbView.getContext();
+            }
         }
 
         public class SeparatorIconHolder extends ItemHolder {
@@ -212,6 +215,7 @@ public class BreadCrumbView<T> extends FrameLayout {
 
             private ImageView icon;
             private TextView text;
+            private ListPopupWindow popupWindow;
 
             public BreadCrumItemHolder(View itemView) {
                 super(itemView);
@@ -226,6 +230,14 @@ public class BreadCrumbView<T> extends FrameLayout {
                         }
                     }
                 });
+                itemView.setOnLongClickListener(new OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        popupWindow.show();
+                        return true;
+                    }
+                });
+                createPopupWindow();
             }
 
             @Override
@@ -252,6 +264,35 @@ public class BreadCrumbView<T> extends FrameLayout {
                 } else {
                     text.setText(null);
                 }
+                popupWindow.setAdapter(null);
+                //Preenche o popup.
+                if (item.getItens().size() > 1) {
+                    ListAdapter adapter = new ArrayAdapter(getContext(), R.layout.view_breadcrumb_dropdown_item, android.R.id.text1, (List<T>) item.getItens());
+                    popupWindow.setAdapter(adapter);
+                    //popupWindow.setWidth(ViewUtils.measureContentWidth(getPopupThemedContext(), adapter));
+                }
+            }
+
+            private void createPopupWindow() {
+                popupWindow = new ListPopupWindow(getContext());
+                popupWindow.setAnchorView(itemView);
+                popupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (breadCrumbView.listener != null) {
+                            final BreadCrumbItem<T> item = (BreadCrumbItem<T>) itemView.getTag();
+                            final T selectedItem = item.getItens().get(i);
+                            final T oldSelectedItem = item.getSelectedItem();
+                            final int level = breadCrumbView.itens.indexOf(item);
+                            item.setSelectedIndex(i);
+                            breadCrumbView.mAdapter.notifyDataSetChanged();
+                            if (breadCrumbView.listener != null) {
+                                breadCrumbView.listener.onItemValueChanged(breadCrumbView, item, level, oldSelectedItem, selectedItem);
+                            }
+                            popupWindow.dismiss();
+                        }
+                    }
+                });
             }
         }
     }

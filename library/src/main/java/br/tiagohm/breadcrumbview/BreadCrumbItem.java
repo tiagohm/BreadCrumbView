@@ -3,8 +3,8 @@ package br.tiagohm.breadcrumbview;
 
 import android.support.annotation.DrawableRes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class BreadCrumbItem<T> {
@@ -13,34 +13,10 @@ public class BreadCrumbItem<T> {
     private List<T> itens;
     private int selectedIndex;
 
-    public BreadCrumbItem(int icon) {
-        this.icon = icon;
-        this.selectedIndex = -1;
-        this.itens = new LinkedList<>();
-    }
-
-    public BreadCrumbItem(int icon, T item) {
-        this.icon = icon;
-        this.itens = new LinkedList<>();
-        this.itens.add(item);
-        selectedIndex = 0;
-    }
-
-    public BreadCrumbItem(List<T> itens) {
-        this(itens.size() > 0 ? 0 : -1, itens);
-    }
-
-    public BreadCrumbItem(int selectedIndex, List<T> itens) {
-        this.selectedIndex = selectedIndex;
-        this.itens = itens;
-    }
-
-    public BreadCrumbItem(T... itens) {
-        this(Arrays.asList(itens));
-    }
-
-    public BreadCrumbItem(int selectedIndex, T... itens) {
-        this(selectedIndex, Arrays.asList(itens));
+    private BreadCrumbItem(Builder<T> builder) {
+        this.icon = builder.icon;
+        this.itens = builder.itens;
+        this.selectedIndex = builder.selectedIndex;
     }
 
     public int getIcon() {
@@ -73,5 +49,35 @@ public class BreadCrumbItem<T> {
 
     public String getText() {
         return getSelectedItem() != null ? getSelectedItem().toString() : null;
+    }
+
+    public static class Builder<T> {
+        private int icon = 0;
+        private List<T> itens = new ArrayList<>();
+        private int selectedIndex = -1;
+
+        public Builder<T> icon(int icon) {
+            this.icon = icon;
+            return this;
+        }
+
+        public Builder<T> itens(List<T> itens) {
+            this.itens = itens;
+            selectedIndex = itens != null && itens.size() > 0 ? 0 : -1;
+            return this;
+        }
+
+        public Builder<T> itens(T... itens) {
+            return itens(Arrays.asList(itens));
+        }
+
+        public Builder<T> selectedIndex(int selectedIndex) {
+            this.selectedIndex = selectedIndex;
+            return this;
+        }
+
+        public BreadCrumbItem<T> build() {
+            return new BreadCrumbItem<T>(this);
+        }
     }
 }

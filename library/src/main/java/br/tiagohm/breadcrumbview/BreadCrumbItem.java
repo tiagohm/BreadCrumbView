@@ -13,6 +13,9 @@ public class BreadCrumbItem<T> {
     private List<T> itens;
     private int selectedIndex;
 
+    protected BreadCrumbItem() {
+    }
+
     private BreadCrumbItem(Builder<T> builder) {
         this.icon = builder.icon;
         this.itens = builder.itens;

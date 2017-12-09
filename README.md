@@ -2,6 +2,8 @@
 
 [![](https://jitpack.io/v/tiagohm/BreadCrumbView.svg)](https://jitpack.io/#tiagohm/BreadCrumbView)
 
+![](https://raw.githubusercontent.com/tiagohm/BreadCrumbView/master/1.png)
+
 ## Dependencies
 
 Adicione ao seu projeto:

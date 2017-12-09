@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class BreadCrumbView<T> extends FrameLayout {
     private List<BreadCrumbItem<T>> itens = new LinkedList<>();
     private int textColor = Color.WHITE;
     private int separatorColor = Color.WHITE;
+    private float textSize = 30;
     private BreadCrumbListener<T> listener;
 
     public BreadCrumbView(@NonNull Context context) {
@@ -61,6 +63,7 @@ public class BreadCrumbView<T> extends FrameLayout {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BreadCrumbView, defStyleAttr, 0);
             textColor = a.getColor(R.styleable.BreadCrumbView_textColor, Color.WHITE);
             separatorColor = a.getColor(R.styleable.BreadCrumbView_separatorColor, Color.WHITE);
+            textSize = a.getDimensionPixelSize(R.styleable.BreadCrumbView_textSize, 30);
             a.recycle();
         }
 
@@ -95,6 +98,15 @@ public class BreadCrumbView<T> extends FrameLayout {
 
     public void setSeparatorColor(@ColorInt int separatorColor) {
         this.separatorColor = separatorColor;
+        update();
+    }
+
+    public float getTextSize() {
+        return textSize;
+    }
+
+    public void setTextSize(float textSize) {
+        this.textSize = textSize;
         update();
     }
 
@@ -261,13 +273,23 @@ public class BreadCrumbView<T> extends FrameLayout {
                     icon.setLayoutParams(lp);
                     text.setText(texto);
                     text.setTextColor(breadCrumbView.getTextColor());
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_PX, breadCrumbView.textSize);
                 } else {
                     text.setText(null);
                 }
                 popupWindow.setAdapter(null);
                 //Preenche o popup.
                 if (item.getItens().size() > 1) {
-                    ListAdapter adapter = new ArrayAdapter(getContext(), R.layout.view_breadcrumb_dropdown_item, android.R.id.text1, item.getItens());
+                    ListAdapter adapter = new ArrayAdapter(getContext(), R.layout.view_breadcrumb_dropdown_item, android.R.id.text1, item.getItens()) {
+                        @NonNull
+                        @Override
+                        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                            View v = super.getView(position, convertView, parent);
+                            TextView textView = v.findViewById(android.R.id.text1);
+                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, breadCrumbView.textSize);
+                            return v;
+                        }
+                    };
                     popupWindow.setAdapter(adapter);
                     //Calcula a largura ideal do popup baseado no comprimento do texto dos itens.
                     final int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);

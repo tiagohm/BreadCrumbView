@@ -3,5 +3,6 @@
     <declare-styleable name="BreadCrumbView">
         <attr name="textColor" format="color"/>
         <attr name="separatorColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
     </declare-styleable>
 </resources>

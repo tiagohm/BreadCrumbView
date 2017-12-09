@@ -34,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemValueChanged(BreadCrumbView view, BreadCrumbItem item, int level, Object oldSelectedItem, Object selectedItem) {
+            public boolean onItemValueChanged(BreadCrumbView view, BreadCrumbItem item, int level, Object oldSelectedItem, Object selectedItem) {
                 Toast.makeText(MainActivity.this, "pos: " + level + " " + item.getText() + " old: " + oldSelectedItem + " new: " + selectedItem, Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
     }

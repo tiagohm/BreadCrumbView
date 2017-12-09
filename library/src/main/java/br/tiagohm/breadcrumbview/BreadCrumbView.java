@@ -33,7 +33,7 @@ public class BreadCrumbView<T> extends FrameLayout {
 
         void onItemClicked(BreadCrumbView<T> view, BreadCrumbItem<T> item, int level);
 
-        void onItemValueChanged(BreadCrumbView<T> view, BreadCrumbItem<T> item, int level, T oldSelectedItem, T selectedItem);
+        boolean onItemValueChanged(BreadCrumbView<T> view, BreadCrumbItem<T> item, int level, T oldSelectedItem, T selectedItem);
     }
 
     private RecyclerView mBreadCrumb;
@@ -317,10 +317,11 @@ public class BreadCrumbView<T> extends FrameLayout {
                             final T selectedItem = item.getItens().get(i);
                             final T oldSelectedItem = item.getSelectedItem();
                             final int level = breadCrumbView.itens.indexOf(item);
-                            item.setSelectedIndex(i);
-                            breadCrumbView.mAdapter.notifyDataSetChanged();
                             if (breadCrumbView.listener != null) {
-                                breadCrumbView.listener.onItemValueChanged(breadCrumbView, item, level, oldSelectedItem, selectedItem);
+                                if (breadCrumbView.listener.onItemValueChanged(breadCrumbView, item, level, oldSelectedItem, selectedItem)) {
+                                    item.setSelectedIndex(i);
+                                    breadCrumbView.mAdapter.notifyDataSetChanged();
+                                }
                             }
                             popupWindow.dismiss();
                         }

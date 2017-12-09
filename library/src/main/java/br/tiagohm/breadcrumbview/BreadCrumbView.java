@@ -61,9 +61,9 @@ public class BreadCrumbView<T> extends FrameLayout {
         //Atributos.
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BreadCrumbView, defStyleAttr, 0);
-            textColor = a.getColor(R.styleable.BreadCrumbView_textColor, Color.WHITE);
-            separatorColor = a.getColor(R.styleable.BreadCrumbView_separatorColor, Color.WHITE);
-            textSize = a.getDimensionPixelSize(R.styleable.BreadCrumbView_textSize, 30);
+            textColor = a.getColor(R.styleable.BreadCrumbView_bcv_textColor, Color.WHITE);
+            separatorColor = a.getColor(R.styleable.BreadCrumbView_bcv_separatorColor, Color.WHITE);
+            textSize = a.getDimensionPixelSize(R.styleable.BreadCrumbView_bcv_textSize, 30);
             a.recycle();
         }
 

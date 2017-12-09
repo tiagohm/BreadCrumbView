@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="BreadCrumbView">
-        <attr name="textColor" format="color"/>
-        <attr name="separatorColor" format="color"/>
-        <attr name="textSize" format="dimension"/>
+        <attr name="bcv_textColor" format="color"/>
+        <attr name="bcv_separatorColor" format="color"/>
+        <attr name="bcv_textSize" format="dimension"/>
     </declare-styleable>
 </resources>

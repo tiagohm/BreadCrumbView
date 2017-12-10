@@ -26,7 +26,7 @@ public class BreadCrumbItem<T> {
         return icon;
     }
 
-    public void setIcon(@DrawableRes int icon) {
+    protected void setIcon(@DrawableRes int icon) {
         this.icon = icon;
     }
 
@@ -34,7 +34,7 @@ public class BreadCrumbItem<T> {
         return selectedIndex;
     }
 
-    public void setSelectedIndex(int selectedIndex) {
+    protected void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
     }
 
@@ -48,6 +48,11 @@ public class BreadCrumbItem<T> {
 
     public List<T> getItens() {
         return itens;
+    }
+
+    protected void setItens(List<T> itens) {
+        this.itens = itens;
+        selectedIndex = itens != null && itens.size() > 0 ? 0 : -1;
     }
 
     public String getText() {
